@@ -1,0 +1,50 @@
+/*
+To change this license header, choose License Headers in Project Properties.
+To change this template file, choose Tools | Templates
+and open the template in the editor.
+*/
+/* 
+    Created on : 26-Nov-2018, 20:15:14
+    Author     : Ahmed
+*/
+
+/*Styles for all buttons on GUI*/
+.button{
+    -fx-padding: 10px; 
+    -fx-border-color:black;
+
+}
+
+/*Hover effect for all buttons on GUI*/
+.button:hover{
+    -fx-background-color: -fx-shadow-highlight-color, -fx-outer-border, -fx-inner-border, -fx-body-color;
+    -fx-border-color:black;
+    -fx-background-color:turquoise;
+    -fx-background-opacity: 0.5;
+    -fx-text-fill: -fx-text-base-color;
+    -fx-alignment: CENTER;
+}
+
+/*Style for VBox on GUI*/
+.root{
+    -fx-background-color:aliceblue;
+    
+}
+
+/* Change color of selected cells */
+.table-row-cell:filled:selected,
+.table-row-cell:filled > .table-cell:selected {
+    -fx-background-color:turquoise;
+}
+
+/*Change color of cells as the user hovers*/
+.table-row-cell:hover{
+    -fx-background-color:lavender
+}
+/*Add border to table-view*/
+.table-view .column-header,
+.table-view .column-header .filler,
+.table-view .column-header-background .filler {
+
+    -fx-border-color:black;
+}
