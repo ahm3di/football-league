@@ -11,4 +11,8 @@
         <maven.compiler.target>1.8</maven.compiler.target>
             <exec.mainClass>com.github.ahmed.football.league.TeamGUI</exec.mainClass>
     </properties>
+<<<<<<< HEAD
 </project>
+=======
+</project>
+>>>>>>> 7965aa69e32938bb59590a8a1f36c053c21983e0
