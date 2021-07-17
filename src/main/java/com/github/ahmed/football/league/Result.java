@@ -4,11 +4,10 @@ package com.github.ahmed.football.league;
 import java.io.Serializable;
 
 /**
- *
  * @author Ahmed
  */
-public class Result implements Serializable{
-    
+public class Result implements Serializable {
+
     private String homeTeam;
     private int homeScore;
     private String awayTeam;
@@ -54,5 +53,4 @@ public class Result implements Serializable{
     }
 
 
-    
 }

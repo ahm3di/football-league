@@ -11,12 +11,17 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
+
 import static java.lang.Integer.parseInt;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+
 import javafx.application.Application;
+
 import static javafx.application.Application.launch;
+
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.geometry.Pos;
@@ -36,11 +41,10 @@ import javafx.scene.text.Text;
 import javafx.stage.Stage;
 
 /**
- *
  * @author Ahmed
  */
 public class TeamGUI extends Application {
-    
+
     public ObservableList<Team> teams;
     public ObservableList<Result> results;
     public String homeNameIn = "";
@@ -53,10 +57,10 @@ public class TeamGUI extends Application {
 
     @Override
     public void start(Stage stage) {
-        
+
         //Set stage title
         stage.setTitle("Football League");
-        
+
         //Create table view, called table
         TableView<Team> table;
         table = new TableView<>();
@@ -65,51 +69,52 @@ public class TeamGUI extends Application {
         TableColumn<Team, String> nameColumn = new TableColumn<>("Name");
         nameColumn.setCellValueFactory(new PropertyValueFactory<>("name"));
         //name columns will occupy 25% of the table
-        nameColumn.prefWidthProperty().bind(table.widthProperty().divide(100/25));
+        nameColumn.prefWidthProperty().bind(table.widthProperty().divide(100 / 25));
 
         //Matches Played column
         TableColumn<Team, Integer> MPColumn = new TableColumn<>("MP");
         MPColumn.setCellValueFactory(new PropertyValueFactory<>("MP"));
-        MPColumn.prefWidthProperty().bind(table.widthProperty().divide(100/9.375));
+        MPColumn.prefWidthProperty().bind(table.widthProperty().divide(100 / 9.375));
 
         //Wins column
         TableColumn<Team, Integer> winsColumn = new TableColumn<>("W");
         winsColumn.setCellValueFactory(new PropertyValueFactory<>("wins"));
-        winsColumn.prefWidthProperty().bind(table.widthProperty().divide(100/9.375));
+        winsColumn.prefWidthProperty().bind(table.widthProperty().divide(100 / 9.375));
 
         //Draws column
         TableColumn<Team, Integer> drawsColumn = new TableColumn<>("D");
         drawsColumn.setCellValueFactory(new PropertyValueFactory<>("draws"));
-        drawsColumn.prefWidthProperty().bind(table.widthProperty().divide(100/9.375));
+        drawsColumn.prefWidthProperty().bind(table.widthProperty().divide(100 / 9.375));
 
         //Losses column
         TableColumn<Team, Integer> lossesColumn = new TableColumn<>("L");
         lossesColumn.setCellValueFactory(new PropertyValueFactory<>("losses"));
-        lossesColumn.prefWidthProperty().bind(table.widthProperty().divide(100/9.375));
+        lossesColumn.prefWidthProperty().bind(table.widthProperty().divide(100 / 9.375));
 
         //Goals For column
         TableColumn<Team, Integer> GFColumn = new TableColumn<>("GF");
         GFColumn.setCellValueFactory(new PropertyValueFactory<>("GF"));
-        GFColumn.prefWidthProperty().bind(table.widthProperty().divide(100/9.375));
+        GFColumn.prefWidthProperty().bind(table.widthProperty().divide(100 / 9.375));
 
         //Goals Against column
         TableColumn<Team, Integer> GAColumn = new TableColumn<>("GA");
         GAColumn.setCellValueFactory(new PropertyValueFactory<>("GA"));
-        GAColumn.prefWidthProperty().bind(table.widthProperty().divide(100/9.375));
+        GAColumn.prefWidthProperty().bind(table.widthProperty().divide(100 / 9.375));
 
         //Goal Difference column
         TableColumn<Team, Integer> GDColumn = new TableColumn<>("GD");
         GDColumn.setCellValueFactory(new PropertyValueFactory<>("GD"));
-        GDColumn.prefWidthProperty().bind(table.widthProperty().divide(100/9.375));
+        GDColumn.prefWidthProperty().bind(table.widthProperty().divide(100 / 9.375));
 
         //Points column
         TableColumn<Team, Integer> pointsColumn = new TableColumn<>("Pts");
         pointsColumn.setCellValueFactory(new PropertyValueFactory<>("points"));
-        pointsColumn.prefWidthProperty().bind(table.widthProperty().divide(100/9.375));
+        pointsColumn.prefWidthProperty().bind(table.widthProperty().divide(100 / 9.375));
 
         //assigns all columns to table
-        table.getColumns().addAll(nameColumn, MPColumn, winsColumn, drawsColumn, lossesColumn, GFColumn, GAColumn, GDColumn, pointsColumn);
-        
+        table.getColumns().addAll(nameColumn, MPColumn, winsColumn, drawsColumn,
+                lossesColumn, GFColumn, GAColumn, GDColumn, pointsColumn);
+
         //load objects from file into team ObservableList
         ObservableList<Team> teams = read();
 
@@ -117,7 +122,7 @@ public class TeamGUI extends Application {
         table.setItems(teams);
 
 
-        //Add buttons 
+        //Add buttons
         Button addButton = new Button();
         addButton.setText("Add Team");
 
@@ -126,17 +131,16 @@ public class TeamGUI extends Application {
 
         Button addResultButton = new Button();
         addResultButton.setText("Add Result");
-        
+
         Button removeResultButton = new Button();
         removeResultButton = new Button("Remove Result");
 
 
-
         //Create table view, called resultsTable and assign 4 columns from above
         TableView<Result> resultTable;
-        
+
         resultTable = new TableView<>();
-        
+
         //Home team name column
         TableColumn<Result, String> hNameColumn = new TableColumn<>("Home Team");
         hNameColumn.setCellValueFactory(new PropertyValueFactory<>("homeTeam"));
@@ -146,7 +150,7 @@ public class TeamGUI extends Application {
         TableColumn<Result, Integer> hScoreColumn = new TableColumn<>("Score");
         hScoreColumn.setCellValueFactory(new PropertyValueFactory<>("homeScore"));
 
-        
+
         //Away team name column
         TableColumn<Result, String> aNameColumn = new TableColumn<>("Away Team");
         aNameColumn.setCellValueFactory(new PropertyValueFactory<>("awayTeam"));
@@ -156,19 +160,19 @@ public class TeamGUI extends Application {
         TableColumn<Result, Integer> aScoreColumn = new TableColumn<>("Score");
         aScoreColumn.setCellValueFactory(new PropertyValueFactory<>("awayScore"));
 
-        
+
         //add columns to resultTable
         resultTable.getColumns().addAll(hNameColumn, hScoreColumn, aNameColumn, aScoreColumn);
 
         Text teamText = new Text("Teams");
         teamText.setFont(Font.font("Monospaced Bold Italic", FontWeight.EXTRA_BOLD, 32));
         teamText.setFill(Color.BLACK);
-        
+
         Text resultText = new Text("Results");
         resultText.setFont(Font.font("Monospaced Bold Italic", FontWeight.EXTRA_BOLD, 32));
         resultText.setFill(Color.BLACK);
-        
-        
+
+
         //load objects from file into result ObservableList
         ObservableList<Result> results = readResult();
         //set table with loaded objects
@@ -207,17 +211,19 @@ public class TeamGUI extends Application {
                 if (!nameEnteredIn.equals("")) {
 
                     //Create new team with with the same name as the user input
-                    Team newTeam = new Team(nameEnteredIn.replace("\\s++$", ""), 0, 0, 0, 0, 0, 0, 0, 0);
+                    Team newTeam = new Team(nameEnteredIn.replace(
+                            "\\s++$", ""), 0, 0, 0, 0, 0, 0, 0, 0);
 
                     //Test to see if the team already exists using contains method
                     //Contains method makes use of equals, which has been overriden
                     //in the Team class
                     nameExists = teams.contains(newTeam);
 
-                    //if nameExists is false the code is run to create the team               
+                    //if nameExists is false the code is run to create the team
                     if (!nameExists) {
                         //Create new team with name entered by the user and remove any trailing spaces
-                        teams.add(new Team(nameEnteredIn.replace("\\s++$", ""), 0, 0, 0, 0, 0, 0, 0, 0));
+                        teams.add(new Team(nameEnteredIn.replace(
+                                "\\s++$", ""), 0, 0, 0, 0, 0, 0, 0, 0));
 
                         //Create a new allert called success with type Information
                         Alert success = new Alert(Alert.AlertType.INFORMATION);
@@ -354,7 +360,7 @@ public class TeamGUI extends Application {
 
                             }
 
-                            //Catch NumberFormatException which occurs when user dosen't enter a number
+                            //Catch NumberFormatException which occurs when user doesn't enter a number
                         } catch (NumberFormatException ne) {
                             Alert alert = new Alert(Alert.AlertType.ERROR);
                             alert.setTitle("ERROR");
@@ -374,7 +380,7 @@ public class TeamGUI extends Application {
 
                     }
 
-                }//end of if statement !homeName.equals("") 
+                }//end of if statement !homeName.equals("")
                 else {
                     //as the user input was an empty string display error
                     Alert alert = new Alert(Alert.AlertType.ERROR);
@@ -405,7 +411,7 @@ public class TeamGUI extends Application {
                             Team newTeam2 = new Team(awayNameIn, 0, 0, 0, 0, 0, 0, 0, 0);
 
                             //Test to see if the team already exists using contains method
-                            //Contains method makes use of equals, which has been overriden
+                            //Contains method makes use of equals, which has been overridden
                             //in the Team class. If it exists the boolean will be set to true
                             boolean teamExists2 = teams.contains(newTeam2);
 
@@ -498,34 +504,16 @@ public class TeamGUI extends Application {
                             endLoop = true;
                         }
                     }// end of while loop
-                    
+
 
                     //only run if validResults variable is true
                     if (validResults) {
+                        homeIndex = getTeamIndex(teams, homeNameIn);
+                        awayIndex = getTeamIndex(teams, awayNameIn);
 
-                        //loop through the list
-                        for (int i = 0; i < teams.size(); i++) {
-                            //find team index of team with the same name as homeNameIn
-                            if (teams.get(i).getName().equalsIgnoreCase(homeNameIn)) {
-                                //set homeIndex to the index of the object
-                                homeIndex = i;
-                                //end loop
-                                break;
-                            }
-                        }
-
-                        for (int i = 0; i < teams.size(); i++) {
-                            //find team index of team with the same name as awayNameIn
-                            if (teams.get(i).getName().equalsIgnoreCase(awayNameIn)) {
-                                //set homeIndex to the index of the object
-                                awayIndex = i;
-                                //end loop
-                                break;
-                            }
-                        }
                         //add new object to results list
                         results.add(new Result(homeNameIn, homeScoreIn, awayNameIn, awayScoreIn));
-                        
+
                         //write results to file
                         writeResult(results);
 
@@ -537,57 +525,11 @@ public class TeamGUI extends Application {
                         teams.get(awayIndex).setGF(awayScoreIn);
                         teams.get(awayIndex).setGA(homeScoreIn);
 
-                        //only run if home team scored more goals than away team
-                        if (homeScoreIn > awayScoreIn) {
-                            //use .setWins() method to add a win to the home team
-                            //.setWins() accepts a value and adds it to the wins
-                            teams.get(homeIndex).setWins(1);
-                            
-                            //use .setLosses() method to add a win to the home team
-                            //.setLosses() accepts a value and adds it to the wins
-                            teams.get(awayIndex).setLosses(1);
-                            
-                            //refresh the table with updated results
-                            table.refresh();
-                            
-                            //write updated list to file;
-                            write(teams);
-                        }
-                        
-                        //only run if away team scored more goals than home team
-                        if (awayScoreIn > homeScoreIn) {
-                            
-                            //use .setWins() method to add a win to the home team
-                            //.setWins() accepts a value and adds it to the wins
-                            teams.get(awayIndex).setWins(1);
-                            
-                            //use .setLosses() method to add a win to the home team
-                            //.setLosses() accepts a value and adds it to the wins
-                            teams.get(homeIndex).setLosses(1);
-                            
-                            //refresh the table with updated results
-                            table.refresh();
-                            
-                            //write updated list to file
-                            write(teams);
+                        updateMatchResult(teams, homeIndex, awayIndex, homeScoreIn, awayScoreIn);
 
-                        }
-                        
-                        //only run if both away team's score and home team's score are equal
-                        if (awayScoreIn == homeScoreIn) {
-                            //use .setDraws() to add 1 draw to home team
-                            //set.Draws() accepts a value and adds to the draws
-                            teams.get(homeIndex).setDraws(1);
-                            
-                            //use .setDraws() to add 1 draw to away team
-                            teams.get(awayIndex).setDraws(1);
-                            
-                            //refresh table with updated results
-                            table.refresh();
-                            
-                            //write updated list to file
-                            write(teams);
-                        }
+                        //refresh table with updated results
+                        table.refresh();
+
                     }
                 }//end of if statement homeScore >0
                 else {
@@ -606,7 +548,7 @@ public class TeamGUI extends Application {
             }
 
         });//end of addResults button
-        
+
         //code to be executed when remove result button
         removeResultButton.setOnAction(e -> {
 
@@ -617,15 +559,32 @@ public class TeamGUI extends Application {
             //get selected team
             resultSelected = resultTable.getSelectionModel().getSelectedItems();
 
-            //remove selected team from table
+            homeIndex = getTeamIndex(teams, resultSelected.get(0).getHomeTeam());
+            awayIndex = getTeamIndex(teams, resultSelected.get(0).getAwayTeam());
+            homeScoreIn = resultSelected.get(0).getHomeScore();
+            awayScoreIn = resultSelected.get(0).getAwayScore();
+
+            //remove goals for and against for home team
+            teams.get(homeIndex).setGF(-homeScoreIn);
+            teams.get(homeIndex).setGA(-awayScoreIn);
+
+            //remove goals for and against for away team
+            teams.get(awayIndex).setGF(-awayScoreIn);
+            teams.get(awayIndex).setGA(-homeScoreIn);
+
+            deleteTeamResult(teams, homeIndex, awayIndex, homeScoreIn, awayScoreIn);
+            //refresh the table with updated values
+            table.refresh();
+
+            //remove selected result from table
             resultSelected.forEach(allresults::remove);
 
-            //write new teams list to the file
+
+            //write updated results to file
             writeResult(results);
 
         });//end of removeButton
-        
-        
+
 
         //Create HBox and add items
         HBox buttonsBox = new HBox(10);
@@ -636,7 +595,7 @@ public class TeamGUI extends Application {
         //Create Vbox and add items
         VBox root = new VBox(20);
         root.setAlignment(Pos.BOTTOM_CENTER);
-        root.getChildren().addAll(teamText,table, buttonsBox, resultText, resultTable);
+        root.getChildren().addAll(teamText, table, buttonsBox, resultText, resultTable);
         root.getStyleClass().add("root");
 
         //Set scene
@@ -652,17 +611,113 @@ public class TeamGUI extends Application {
         launch(args);
     }
 
+    private int getTeamIndex(ObservableList<Team> teams, String teamNameIn) {
+        for (int i = 0; i < teams.size(); i++) {
+            //find team index of team with the same name as homeNameIn
+            if (teams.get(i).getName().equalsIgnoreCase(teamNameIn)) {
+                //set homeIndex to the index of the object
+                return i;
+            }
+        }
+        return 0;
+    }
+
+    private void updateMatchResult(ObservableList<Team> teams, int homeIndex,
+                                   int awayIndex, int homeScoreIn, int awayScoreIn) {
+        //only run if home team scored more goals than away team
+        if (homeScoreIn > awayScoreIn) {
+
+            //use .setWins() method to add a win to the home team
+            //.setWins() accepts a value and adds it to the wins
+            teams.get(homeIndex).setWins(1);
+
+            //use .setLosses() method to add a win to the home team
+            //.setLosses() accepts a value and adds it to the wins
+            teams.get(awayIndex).setLosses(1);
+        }
+
+        //only run if away team scored more goals than home team
+        if (awayScoreIn > homeScoreIn) {
+
+            //use .setWins() method to add a win to the home team
+            //.setWins() accepts a value and adds it to the wins
+            teams.get(awayIndex).setWins(1);
+
+            //use .setLosses() method to add a win to the home team
+            //.setLosses() accepts a value and adds it to the wins
+            teams.get(homeIndex).setLosses(1);
+
+        }
+
+        //only run if both away team's score and home team's score are equal
+        if (awayScoreIn == homeScoreIn) {
+
+            //use .setDraws() to add 1 draw to home team
+            //set.Draws() accepts a value and adds to the draws
+            teams.get(homeIndex).setDraws(1);
+
+            //use .setDraws() to add 1 draw to away team
+            teams.get(awayIndex).setDraws(1);
+
+        }
+
+        //write updated list to file;
+        write(teams);
+    }
+
+    private void deleteTeamResult(ObservableList<Team> teams, int homeIndex,
+                                  int awayIndex, int homeScoreIn, int awayScoreIn) {
+        //only run if home team scored more goals than away team
+        if (homeScoreIn > awayScoreIn) {
+
+            //use .setWins() method to add a win to the home team
+            //.setWins() accepts a value and adds it to the wins
+            teams.get(homeIndex).setWins(-1);
+
+            //use .setLosses() method to add a win to the home team
+            //.setLosses() accepts a value and adds it to the wins
+            teams.get(awayIndex).setLosses(-1);
+        }
+
+        //only run if away team scored more goals than home team
+        if (awayScoreIn > homeScoreIn) {
+
+            //use .setWins() method to add a win to the home team
+            //.setWins() accepts a value and adds it to the wins
+            teams.get(awayIndex).setWins(-1);
+
+            //use .setLosses() method to add a win to the home team
+            //.setLosses() accepts a value and adds it to the wins
+            teams.get(homeIndex).setLosses(-1);
+
+        }
+
+        //only run if both away team's score and home team's score are equal
+        if (awayScoreIn == homeScoreIn) {
+
+            //use .setDraws() to add 1 draw to home team
+            //set.Draws() accepts a value and adds to the draws
+            teams.get(homeIndex).setDraws(-1);
+
+            //use .setDraws() to add 1 draw to away team
+            teams.get(awayIndex).setDraws(-1);
+
+        }
+        //write updated list to file;
+        write(teams);
+    }
+
     public void write(ObservableList<Team> teamObservable) {
         try {
             // write objects to file
             FileOutputStream fos = new FileOutputStream("src/main/resources/teamSave.ser");
             ObjectOutputStream oos = new ObjectOutputStream(fos);
-            //written as Team Objects 
+            //written as Team Objects
             oos.writeObject(new ArrayList<Team>(teamObservable));
             //close object output stream
             oos.close();
-            
-        //catch Exceptions
+
+            //catch Exceptions
         } catch (FileNotFoundException e) {
             e.printStackTrace();
         } catch (IOException e) {
@@ -679,11 +734,11 @@ public class TeamGUI extends Application {
             ObjectInputStream ois = new ObjectInputStream(fis);
             //read as Team objects, loaded into list
             List<Team> list = (List<Team>) ois.readObject();
-            //list returned as part of observableArrayList which is a part of 
+            //list returned as part of observableArrayList which is a part of
             //FXCollections
             return FXCollections.observableArrayList(list);
 
-        //catch exceptions
+            //catch exceptions
         } catch (ClassNotFoundException e) {
             e.printStackTrace();
         } catch (IOException e) {
@@ -700,14 +755,14 @@ public class TeamGUI extends Application {
             FileInputStream fis2 = new FileInputStream("src/main/resources/resultSave.ser");
 
             ObjectInputStream ois2 = new ObjectInputStream(fis2);
-            
+
             //read as Result objects into list
             List<Result> list2 = (List<Result>) ois2.readObject();
 
             //returned as observableArrayList
             return FXCollections.observableArrayList(list2);
 
-        //catch Exceptions
+            //catch Exceptions
         } catch (ClassNotFoundException e) {
             e.printStackTrace();
         } catch (IOException e) {
@@ -729,7 +784,7 @@ public class TeamGUI extends Application {
             //close object output stream
             oos2.close();
 
-        //catch Exceptions    
+            //catch Exceptions
         } catch (FileNotFoundException e) {
             e.printStackTrace();
         } catch (IOException e) {
@@ -738,5 +793,5 @@ public class TeamGUI extends Application {
 
     }
 
-    
+
 }

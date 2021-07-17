@@ -11,17 +11,4 @@
         <maven.compiler.target>1.8</maven.compiler.target>
             <exec.mainClass>com.github.ahmed.football.league.TeamGUI</exec.mainClass>
     </properties>
-   
-<!--    <build>
-        <plugins>
-            <plugin>
-                <groupId>org.codehaus.mojo</groupId>
-                <artifactId>exec-maven-plugin</artifactId>
-                <version>1.0</version>
-                <configuration>
-                    <mainClass>com.github.ahmed.TeamGUI</mainClass>
-                </configuration>
-            </plugin>
-        </plugins>
-    </build>-->
 </project>
