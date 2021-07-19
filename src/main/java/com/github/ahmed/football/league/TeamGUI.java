@@ -275,27 +275,32 @@ public class TeamGUI extends Application {
             String teamName = teamSelected.get(0).getName();
 
             results.forEach(result -> {
+
+                homeIndex = getTeamIndex(teams, result.getHomeTeam());
+                awayIndex = getTeamIndex(teams, result.getAwayTeam());
+
                 if (result.getHomeTeam().equals(teamName)) {
-                    awayIndex = getTeamIndex(teams, result.getAwayTeam());
                     awayScoreIn = result.getAwayScore();
                     homeScoreIn = result.getHomeScore();
+                    deleteTeamResult(teams, homeIndex, awayIndex, homeScoreIn, awayScoreIn);
                     teams.get(awayIndex).setGF(-awayScoreIn);
                     teams.get(awayIndex).setGA(-homeScoreIn);
                 }
+
                 else if(result.getAwayTeam().equals(teamName)){
-                    homeIndex = getTeamIndex(teams, result.getHomeTeam());
                     awayScoreIn = result.getAwayScore();
                     homeScoreIn = result.getHomeScore();
+                    deleteTeamResult(teams, homeIndex, awayIndex, homeScoreIn, awayScoreIn);
                     teams.get(homeIndex).setGF(-homeScoreIn);
-                    teams.get(awayIndex).setGA(-awayScoreIn);
+                    teams.get(homeIndex).setGA(-awayScoreIn);
                 }
             });
 
             results.removeIf(result -> result.getHomeTeam().equals(teamName));
             results.removeIf(result -> result.getAwayTeam().equals(teamName));
 
-            //refresh the table with updated values
-            table.refresh();
+//            //refresh the table with updated values
+//            table.refresh();
 
             //remove selected team from table
             teamSelected.forEach(allTeams::remove);
