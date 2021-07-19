@@ -45,8 +45,6 @@ import javafx.stage.Stage;
  */
 public class TeamGUI extends Application {
 
-    public ObservableList<Team> teams;
-    public ObservableList<Result> results;
     public String homeNameIn = "";
     public String awayNameIn = "";
     public int homeScoreIn = -1;
@@ -118,7 +116,7 @@ public class TeamGUI extends Application {
         //load objects from file into team ObservableList
         ObservableList<Team> teams = read();
 
-        //set sable with loaded objects
+        //set table with loaded objects
         table.setItems(teams);
 
 
@@ -267,15 +265,43 @@ public class TeamGUI extends Application {
         //code to be executed when remove button is clicked
         removeButton.setOnAction(e -> {
 
-            ObservableList<Team> teamSelected, allteams;
-            //set 'allteams' variable to items in the table
-            allteams = table.getItems();
+            ObservableList<Team> teamSelected, allTeams;
+            //set 'allTeams' variable to items in the table
+            allTeams = table.getItems();
 
             //get selected team
             teamSelected = table.getSelectionModel().getSelectedItems();
 
+            String teamName = teamSelected.get(0).getName();
+
+            results.forEach(result -> {
+                if (result.getHomeTeam().equals(teamName)) {
+                    awayIndex = getTeamIndex(teams, result.getAwayTeam());
+                    awayScoreIn = result.getAwayScore();
+                    homeScoreIn = result.getHomeScore();
+                    teams.get(awayIndex).setGF(-awayScoreIn);
+                    teams.get(awayIndex).setGA(-homeScoreIn);
+                }
+                else if(result.getAwayTeam().equals(teamName)){
+                    homeIndex = getTeamIndex(teams, result.getHomeTeam());
+                    awayScoreIn = result.getAwayScore();
+                    homeScoreIn = result.getHomeScore();
+                    teams.get(homeIndex).setGF(-homeScoreIn);
+                    teams.get(awayIndex).setGA(-awayScoreIn);
+                }
+            });
+
+            results.removeIf(result -> result.getHomeTeam().equals(teamName));
+            results.removeIf(result -> result.getAwayTeam().equals(teamName));
+
+            //refresh the table with updated values
+            table.refresh();
+
             //remove selected team from table
-            teamSelected.forEach(allteams::remove);
+            teamSelected.forEach(allTeams::remove);
+
+            //write updated results to file
+            writeResult(results);
 
             //write new teams list to the file
             write(teams);
@@ -552,9 +578,9 @@ public class TeamGUI extends Application {
         //code to be executed when remove result button
         removeResultButton.setOnAction(e -> {
 
-            ObservableList<Result> resultSelected, allresults;
-            //set 'allteams' variable to items in the table
-            allresults = resultTable.getItems();
+            ObservableList<Result> resultSelected, allResults;
+            //set 'allResults' variable to items in the table
+            allResults = resultTable.getItems();
 
             //get selected team
             resultSelected = resultTable.getSelectionModel().getSelectedItems();
@@ -573,17 +599,17 @@ public class TeamGUI extends Application {
             teams.get(awayIndex).setGA(-homeScoreIn);
 
             deleteTeamResult(teams, homeIndex, awayIndex, homeScoreIn, awayScoreIn);
+
             //refresh the table with updated values
             table.refresh();
 
             //remove selected result from table
-            resultSelected.forEach(allresults::remove);
-
+            resultSelected.forEach(allResults::remove);
 
             //write updated results to file
             writeResult(results);
 
-        });//end of removeButton
+        });//end of removeResultButton
 
 
         //Create HBox and add items
@@ -792,6 +818,4 @@ public class TeamGUI extends Application {
         }
 
     }
-
-
 }
