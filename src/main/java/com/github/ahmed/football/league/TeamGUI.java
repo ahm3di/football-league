@@ -1,8 +1,3 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package com.github.ahmed.football.league;
 
 import java.io.FileInputStream;
@@ -11,17 +6,11 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
-
 import static java.lang.Integer.parseInt;
-
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
-
 import javafx.application.Application;
-
-import static javafx.application.Application.launch;
-
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.geometry.Pos;
@@ -43,6 +32,7 @@ import javafx.stage.Stage;
 /**
  * @author Ahmed
  */
+
 public class TeamGUI extends Application {
 
     public String homeNameIn = "";
@@ -119,7 +109,6 @@ public class TeamGUI extends Application {
         //set table with loaded objects
         table.setItems(teams);
 
-
         //Add buttons
         Button addButton = new Button();
         addButton.setText("Add Team");
@@ -133,10 +122,8 @@ public class TeamGUI extends Application {
         Button removeResultButton = new Button();
         removeResultButton = new Button("Remove Result");
 
-
         //Create table view, called resultsTable and assign 4 columns from above
         TableView<Result> resultTable;
-
         resultTable = new TableView<>();
 
         //Home team name column
@@ -148,7 +135,6 @@ public class TeamGUI extends Application {
         TableColumn<Result, Integer> hScoreColumn = new TableColumn<>("Score");
         hScoreColumn.setCellValueFactory(new PropertyValueFactory<>("homeScore"));
 
-
         //Away team name column
         TableColumn<Result, String> aNameColumn = new TableColumn<>("Away Team");
         aNameColumn.setCellValueFactory(new PropertyValueFactory<>("awayTeam"));
@@ -157,7 +143,6 @@ public class TeamGUI extends Application {
         //Away team score column
         TableColumn<Result, Integer> aScoreColumn = new TableColumn<>("Score");
         aScoreColumn.setCellValueFactory(new PropertyValueFactory<>("awayScore"));
-
 
         //add columns to resultTable
         resultTable.getColumns().addAll(hNameColumn, hScoreColumn, aNameColumn, aScoreColumn);
@@ -169,7 +154,6 @@ public class TeamGUI extends Application {
         Text resultText = new Text("Results");
         resultText.setFont(Font.font("Monospaced Bold Italic", FontWeight.EXTRA_BOLD, 32));
         resultText.setFill(Color.BLACK);
-
 
         //load objects from file into result ObservableList
         ObservableList<Result> results = readResult();
@@ -263,55 +247,57 @@ public class TeamGUI extends Application {
         }); //end of addButton
 
         //code to be executed when remove button is clicked
-        removeButton.setOnAction(e -> {
 
-            ObservableList<Team> teamSelected, allTeams;
-            //set 'allTeams' variable to items in the table
-            allTeams = table.getItems();
+            removeButton.setOnAction(e -> {
 
-            //get selected team
-            teamSelected = table.getSelectionModel().getSelectedItems();
+                ObservableList<Team> teamSelected, allTeams;
+                //set 'allTeams' variable to items in the table
+                allTeams = table.getItems();
 
-            String teamName = teamSelected.get(0).getName();
+                //get selected team
+                teamSelected = table.getSelectionModel().getSelectedItems();
 
-            results.forEach(result -> {
+                String teamName = teamSelected.get(0).getName();
 
-                homeIndex = getTeamIndex(teams, result.getHomeTeam());
-                awayIndex = getTeamIndex(teams, result.getAwayTeam());
+                results.forEach(result -> {
 
-                if (result.getHomeTeam().equals(teamName)) {
+                    // get index for both teams
+                    homeIndex = getTeamIndex(teams, result.getHomeTeam());
+                    awayIndex = getTeamIndex(teams, result.getAwayTeam());
                     awayScoreIn = result.getAwayScore();
                     homeScoreIn = result.getHomeScore();
-                    deleteTeamResult(teams, homeIndex, awayIndex, homeScoreIn, awayScoreIn);
-                    teams.get(awayIndex).setGF(-awayScoreIn);
-                    teams.get(awayIndex).setGA(-homeScoreIn);
-                }
 
-                else if(result.getAwayTeam().equals(teamName)){
-                    awayScoreIn = result.getAwayScore();
-                    homeScoreIn = result.getHomeScore();
-                    deleteTeamResult(teams, homeIndex, awayIndex, homeScoreIn, awayScoreIn);
-                    teams.get(homeIndex).setGF(-homeScoreIn);
-                    teams.get(homeIndex).setGA(-awayScoreIn);
-                }
-            });
+                    // if the team being deleted is the home team, update away team
+                    // info to reflect this change
+                    if (result.getHomeTeam().equals(teamName)) {
+                        deleteTeamResult(teams, homeIndex, awayIndex, homeScoreIn, awayScoreIn);
+                        teams.get(awayIndex).setGF(-awayScoreIn);
+                        teams.get(awayIndex).setGA(-homeScoreIn);
+                    }
 
-            results.removeIf(result -> result.getHomeTeam().equals(teamName));
-            results.removeIf(result -> result.getAwayTeam().equals(teamName));
+                    // if the team being deleted is the away team, update home team
+                    // info to reflect this change
+                    else if (result.getAwayTeam().equals(teamName)) {
+                        deleteTeamResult(teams, homeIndex, awayIndex, homeScoreIn, awayScoreIn);
+                        teams.get(homeIndex).setGF(-homeScoreIn);
+                        teams.get(homeIndex).setGA(-awayScoreIn);
+                    }
+                });
 
-//            //refresh the table with updated values
-//            table.refresh();
+                // remove all results involving team being deleted
+                results.removeIf(result -> result.getHomeTeam().equals(teamName));
+                results.removeIf(result -> result.getAwayTeam().equals(teamName));
 
-            //remove selected team from table
-            teamSelected.forEach(allTeams::remove);
+                //remove selected team from table
+                teamSelected.forEach(allTeams::remove);
 
-            //write updated results to file
-            writeResult(results);
+                //write updated results to file
+                writeResult(results);
 
-            //write new teams list to the file
-            write(teams);
+                //write new teams list to the file
+                write(teams);
 
-        });//end of removeButton
+            });//end of removeButton
 
         //code to be executed when add button is clicked
         addResultButton.setOnAction(e -> {
@@ -351,7 +337,6 @@ public class TeamGUI extends Application {
 
                         //try catch block used to catch NumberFormatException
                         try {
-
                             //create new TextInputDialog for home score input
                             TextInputDialog HomeScoreDialog = new TextInputDialog();
                             HomeScoreDialog.setTitle("Home Team Details");
@@ -388,7 +373,6 @@ public class TeamGUI extends Application {
                             else {
                                 //as user selected exit or cancel close dialog
                                 HomeScoreDialog.close();
-
                             }
 
                             //Catch NumberFormatException which occurs when user doesn't enter a number
@@ -408,9 +392,7 @@ public class TeamGUI extends Application {
                         alert.setHeaderText("Team doesn't exist!");
                         alert.showAndWait();
                         teamExists = false;
-
                     }
-
                 }//end of if statement !homeName.equals("")
                 else {
                     //as the user input was an empty string display error
@@ -420,6 +402,7 @@ public class TeamGUI extends Application {
                     alert.showAndWait();
                     teamExists = false;
                 }
+
                 //Only run if the homeScoreIn is greater than or equal to 0
                 if (homeScoreIn >= 0) {
 
@@ -526,7 +509,6 @@ public class TeamGUI extends Application {
                                     alert.showAndWait();
                                 }
                             }
-
                         } // end of if statement awayName.isPresent()
                         else {
                             //as the cancel or close button was clicked, set endLoop to true
@@ -535,7 +517,6 @@ public class TeamGUI extends Application {
                             endLoop = true;
                         }
                     }// end of while loop
-
 
                     //only run if validResults variable is true
                     if (validResults) {
@@ -560,7 +541,6 @@ public class TeamGUI extends Application {
 
                         //refresh table with updated results
                         table.refresh();
-
                     }
                 }//end of if statement homeScore >0
                 else {
@@ -569,7 +549,6 @@ public class TeamGUI extends Application {
                     alert.setTitle("ERROR");
                     alert.setHeaderText("Home team goals must be greater than or equal to 0");
                     alert.showAndWait();
-
                 }
 
             }//end of if statement homeName.isPresent()
@@ -616,7 +595,6 @@ public class TeamGUI extends Application {
 
         });//end of removeResultButton
 
-
         //Create HBox and add items
         HBox buttonsBox = new HBox(10);
         buttonsBox.setAlignment(Pos.CENTER);
@@ -633,9 +611,7 @@ public class TeamGUI extends Application {
         Scene scene = new Scene(root, 766, 600);
         stage.setScene(scene);
         scene.getStylesheets().add("stylesheet.css");
-
         stage.show();
-
     }
 
     public static void main(String[] args) {
@@ -677,7 +653,6 @@ public class TeamGUI extends Application {
             //use .setLosses() method to add a win to the home team
             //.setLosses() accepts a value and adds it to the wins
             teams.get(homeIndex).setLosses(1);
-
         }
 
         //only run if both away team's score and home team's score are equal
@@ -689,7 +664,6 @@ public class TeamGUI extends Application {
 
             //use .setDraws() to add 1 draw to away team
             teams.get(awayIndex).setDraws(1);
-
         }
 
         //write updated list to file;
@@ -720,7 +694,6 @@ public class TeamGUI extends Application {
             //use .setLosses() method to add a win to the home team
             //.setLosses() accepts a value and adds it to the wins
             teams.get(homeIndex).setLosses(-1);
-
         }
 
         //only run if both away team's score and home team's score are equal
@@ -732,8 +705,8 @@ public class TeamGUI extends Application {
 
             //use .setDraws() to add 1 draw to away team
             teams.get(awayIndex).setDraws(-1);
-
         }
+
         //write updated list to file;
         write(teams);
     }
@@ -754,7 +727,6 @@ public class TeamGUI extends Application {
         } catch (IOException e) {
             e.printStackTrace();
         }
-
     }
 
     public ObservableList<Team> read() {
@@ -821,6 +793,5 @@ public class TeamGUI extends Application {
         } catch (IOException e) {
             e.printStackTrace();
         }
-
     }
 }
