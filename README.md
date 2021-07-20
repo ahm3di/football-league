@@ -10,6 +10,6 @@ played, wins, draws, losses, goals for, goals against, goal difference and point
 - `(Optional)` Install [Git](https://git-scm.com/book/en/v2/Getting-Started-Installing-Git)
 - Download project
 - Switch working directory to `football-league` and run:
-    - Compile: `mvn clean install`
-    - Build: `mvn exec:java`
+    - Clean and build: `mvn clean install`
+    - Execute main class: `mvn exec:java`
 
